@@ -73,14 +73,19 @@ function readFullFolder (folderPath, folderArr) {
 
 // * refix req, res for router handler
 function refixNativeReqRes (req, res, params, store, searchParams) {
-    req = { primitives: req };
-    res = { primitives: res };
+    req = { primitives: req, metadata: {} };
+    res = { primitives: res, metadata: {} };
     res.status = function (statusCode) {
         res.primitives.statusCode = statusCode;
         return res;
     }
     res.send = function (value) {
+        res.metadata.endHttp = true;
         res.primitives.end(value);
+        return res;
+    }
+    res.endHttp = function () {
+        res.metadata.endHttp = true;
     }
     req.params = params;
     req.store = store;

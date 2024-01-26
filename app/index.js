@@ -7,7 +7,6 @@ const __D1__SERVER__ = {
 }
 let data;
 const __D1__CONFIGS__ = {
-    middlewares: [],
     excludeFolderRouting: false,
     excludeFileRouting: false,
     router: {
@@ -17,6 +16,20 @@ const __D1__CONFIGS__ = {
             data = discoveredRoutes;
         }
     }
+}
+
+const __D1__MIDDLEWARES__ = [middleWare1, {
+    cb: middleware2,
+    excludePaths: ['/'],
+    onlyPaths: ['/'] // * excludePaths will be ignored if onlyPaths is present
+}];
+
+function middleWare1 (req, res) {
+    console.log('middleware 1 is procced');
+}
+
+function middleware2 (req, res) {
+    console.log('middleware 2 is procced');
 }
 
 'GET /'
@@ -41,6 +54,7 @@ function unExportedRoute(req, res) {
 module.exports = {
     __D1__SERVER__,
     __D1__CONFIGS__,
+    __D1__MIDDLEWARES__,
     handShake,
     shakeTest: handShakeTest,
     notARoute

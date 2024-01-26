@@ -3,6 +3,7 @@ const http = require('http');
 const findMyWay = require('find-my-way');
 const errors = require('./errors');
 const constants = require('./constants');
+const { runMiddleWares } = require('./middlewares');
 const {
     debugObject,
     checkDefinitionExported,
@@ -41,6 +42,12 @@ const {
  * There should be no need to provide a callback, the app will only
  * serve routes where there is an exported function action with route path
  * 
+ * 
+ * res.metadata.endHttp = setting this to true will stop the call through next middlewares
+ * res.send automatically sets endHttp to true. However when using native call, 
+ * user should manually set endHttp
+ * 
+ * if middleware.onlyPaths exist, middleware,excludePaths will be ignored
  */
 
 function serve(applicationPath) {
@@ -101,23 +108,35 @@ function serve(applicationPath) {
 
     const routerConfigs = __D1__CONFIGS__.router
         ? __D1__CONFIGS__.router
-        : {} // TODO: Fill with default router configs?
+        : {}
     const router = findMyWay(routerConfigs);
 
+    const __D1__MIDDLEWARES__ = (() => {
+        const conf = app.find(f => {
+            if (f.type !== 'file') {
+                return false;
+            }
+            const contentBody = f.content.body;
+            const isDefinitionExported = (
+                checkDefinitionExported(
+                    contentBody,
+                    constants.reservedVarKeys[2]
+                )
+            );
+            return Boolean(isDefinitionExported);
+        });
+        if (conf) {
+            const { __D1__MIDDLEWARES__ } = require(path.join(__dirname, applicationPath, conf.name));
+            return __D1__MIDDLEWARES__;
+        }
+        return;
+    })();
+    const middlewares = __D1__MIDDLEWARES__ ? __D1__MIDDLEWARES__ : [];
     // * [[method, endpoint, function action, action file path]]
     const routePaths = []
     findRouteInPaths(routePaths, __D1__CONFIGS__, app, '/', applicationPath);
+    designateRoutes(router, routePaths, routerConfigs, middlewares);
 
-    routePaths.forEach(r => {
-        errorOnInvalidMethod(r.method);
-        router.on(r.method, r.endpoint, function (req, res, params, store, searchParams) {
-            const [newReq, newRes] = refixNativeReqRes(req, res, params, store, searchParams);
-            require(path.join(__dirname, r.filePath))[r.action](newReq, newRes);
-        });
-        if (routerConfigs.discoveredRoutes) {
-            routerConfigs.discoveredRoutes(router.prettyPrint())
-        }
-    });
     // * instantiate a server
     const server = http.createServer(
         function requestListener(primReq, primRes) {
@@ -129,5 +148,24 @@ function serve(applicationPath) {
     server.listen(__D1__SERVER__.port, __D1__SERVER__.host, __D1__SERVER__.cb);
 }
 
+// TODO: still ongoing in middlewares
+function designateRoutes (router, routePaths, routerConfigs, middlewares) {
+    routePaths.forEach(r => {
+        errorOnInvalidMethod(r.method);
+        router.on(r.method, r.endpoint, function (req, res, params, store, searchParams) {
+            const [newReq, newRes] = refixNativeReqRes(req, res, params, store, searchParams);
+            runMiddleWares(
+                [...middlewares, require(path.join(__dirname, r.filePath))[r.action]], 
+                r, 
+                newReq, 
+                newRes
+            );
+        });
+        if (routerConfigs.discoveredRoutes) {
+            routerConfigs.discoveredRoutes(router.prettyPrint())
+        }
+    });
+}
 
 serve(process.argv.slice(2)[0] || '../app');
+module.exports = serve;
