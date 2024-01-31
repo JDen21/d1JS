@@ -10,7 +10,7 @@ function debugObject (obj, decors) {
 function checkNameDefined (contentBody, varName) {
   return contentBody.find(b => {
     return b.type === 'VariableDeclaration' &&
-        b.declarations[0].id.name === varName;
+      b.declarations[0].id.name === varName;
   });
 }
 
@@ -20,7 +20,7 @@ function checkDefinitionExported (contentBody, varName, booleanReturn = true) {
       return false;
     }
     if (b.expression.type !== 'AssignmentExpression' ||
-        b.expression.operator !== '=') {
+      b.expression.operator !== '=') {
       return false;
     }
 
@@ -30,7 +30,7 @@ function checkDefinitionExported (contentBody, varName, booleanReturn = true) {
 
     const left = b.expression.left;
     if (left.object.name !== 'module' ||
-        left.property.name !== 'exports') {
+      left.property.name !== 'exports') {
       return false;
     }
 
@@ -42,12 +42,12 @@ function checkDefinitionExported (contentBody, varName, booleanReturn = true) {
       return Boolean(right.properties
         .find(p =>
           p.type === 'Property' &&
-                    p.value.name === varName));
+          p.value.name === varName));
     }
     return right.properties
       .find(p =>
         p.type === 'Property' &&
-                p.value.name === varName);
+        p.value.name === varName);
   });
 }
 

@@ -47,6 +47,7 @@ const {
  * user should manually set endHttp
  *
  * if middleware.onlyPaths exist, middleware,excludePaths will be ignored
+ * __D1__SERVER__.getServerInstance: provides the native server object via cb
  */
 
 function serve (applicationPath) {
@@ -144,6 +145,10 @@ function serve (applicationPath) {
     }
   );
 
+  if (__D1__SERVER__.getServerInstance) {
+    __D1__SERVER__.getServerInstance(serve);
+  }
+
   server.listen(__D1__SERVER__.port, __D1__SERVER__.host, __D1__SERVER__.cb);
 }
 
@@ -162,5 +167,4 @@ function designateRoutes (router, routePaths, routerConfigs, middlewares) {
   });
 }
 
-serve(process.argv.slice(2)[0] || '../app');
 module.exports = serve;
