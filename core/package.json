@@ -1,11 +1,10 @@
 {
-  "name": "d1",
+  "name": "d1-core",
   "version": "1.0.0",
   "description": "",
-  "main": "libs/index.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./index.js ../app"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",

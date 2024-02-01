@@ -1,7 +1,7 @@
 {
   "name": "d1",
   "version": "1.0.0",
-  "description": "",
+  "description": "My personal framework.",
   "main": ".eslintrc.js",
   "scripts": {
     "lint": "npx eslint ./.eslintrc.js . --fix",
@@ -12,8 +12,8 @@
     "type": "git",
     "url": "git+https://JDen21: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@github.com/JDen21/d1JS.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["framework", "d1", "callback"],
+  "author": "deng.",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^8.56.0",

@@ -3,13 +3,11 @@ const http = require('http');
 const findMyWay = require('find-my-way');
 const errors = require('./errors');
 const constants = require('./constants');
-const { runMiddleWares } = require('./middlewares');
 const {
   checkDefinitionExported,
   readFullFolder,
-  refixNativeReqRes,
   findRouteInPaths,
-  errorOnInvalidMethod
+  designateRoutes
 } = require('./utils');
 
 /**
@@ -52,7 +50,7 @@ const {
 
 function serve (applicationPath) {
   // * use acorn to check for file details
-  const app = readFullFolder(path.join(__dirname, applicationPath), []);
+  const app = readFullFolder(applicationPath, []);
 
   // * check for one of the deg 1 app files for server definition
   const fileWithServerDefExported = app.find(f => {
@@ -77,7 +75,6 @@ function serve (applicationPath) {
   const { __D1__SERVER__ } = (
     require(
       path.join(
-        __dirname,
         applicationPath,
         fileWithServerDefExported.name
       )
@@ -100,15 +97,13 @@ function serve (applicationPath) {
       return Boolean(isDefinitionExported);
     });
     if (conf) {
-      const confPath = path.join(__dirname, applicationPath, conf.name);
+      const confPath = path.join(applicationPath, conf.name);
       const { __D1__CONFIGS__ } = require(confPath);
       return __D1__CONFIGS__;
     }
-  })();
+  })() ?? {};
 
-  const routerConfigs = __D1__CONFIGS__.router
-    ? __D1__CONFIGS__.router
-    : {};
+  const routerConfigs = __D1__CONFIGS__?.router || {};
   const router = findMyWay(routerConfigs);
 
   const __D1__MIDDLEWARES__ = (() => {
@@ -126,7 +121,7 @@ function serve (applicationPath) {
       return Boolean(isDefinitionExported);
     });
     if (mw) {
-      const mwPath = path.join(__dirname, applicationPath, mw.name);
+      const mwPath = path.join(applicationPath, mw.name);
       const { __D1__MIDDLEWARES__ } = require(mwPath);
       return __D1__MIDDLEWARES__;
     }
@@ -150,21 +145,6 @@ function serve (applicationPath) {
   }
 
   server.listen(__D1__SERVER__.port, __D1__SERVER__.host, __D1__SERVER__.cb);
-}
-
-function designateRoutes (router, routePaths, routerConfigs, middlewares) {
-  routePaths.forEach(r => {
-    errorOnInvalidMethod(r.method);
-    router.on(r.method, r.endpoint, function (req, res, params, store, searchParams) {
-      const [newReq, newRes] = refixNativeReqRes(req, res, params, store, searchParams);
-      const action = require(path.join(__dirname, r.filePath))[r.action];
-      const allFnsToCall = [...middlewares, action];
-      runMiddleWares(allFnsToCall, r, newReq, newRes);
-    });
-    if (routerConfigs.discoveredRoutes) {
-      routerConfigs.discoveredRoutes(router.prettyPrint());
-    }
-  });
 }
 
 module.exports = serve;

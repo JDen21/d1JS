@@ -3,6 +3,7 @@ const util = require('util');
 const acorn = require('acorn');
 const path = require('path');
 const errors = require('./errors');
+const { runMiddleWares } = require('./middlewares');
 
 function debugObject (obj, decors) {
   return console.log(decors, util.inspect(obj, { showHidden: false, depth: null, colors: true }));
@@ -167,7 +168,16 @@ function findRoutesInFile (currPath, currUrl, exportFilePath) {
       continue;
     }
 
-    [funcActionMethod, funcActionPath] = pathNode.expression.value.split(' ');
+    const methodAndPath = pathNode.expression.value.split(' ');
+
+    if (methodAndPath.length === 1) {
+      funcActionMethod = 'get';
+      funcActionPath = methodAndPath[0];
+    } else {
+      funcActionMethod = methodAndPath[0];
+      funcActionPath = methodAndPath[1];
+    }
+
     funcActionMethod = funcActionMethod.toUpperCase();
     if (funcActionPath.startsWith('/')) {
       funcActionPath = funcActionPath.split('/');
@@ -234,6 +244,21 @@ function getFileExportsKeyValue (node, allValueNames) {
   });
 }
 
+function designateRoutes (router, routePaths, routerConfigs, middlewares) {
+  routePaths.forEach(r => {
+    errorOnInvalidMethod(r.method);
+    router.on(r.method, r.endpoint, function (req, res, params, store, searchParams) {
+      const [newReq, newRes] = refixNativeReqRes(req, res, params, store, searchParams);
+      const action = require(r.filePath)[r.action];
+      const allFnsToCall = [...middlewares, action];
+      runMiddleWares(allFnsToCall, r, newReq, newRes);
+    });
+    if (routerConfigs.discoveredRoutes) {
+      routerConfigs.discoveredRoutes(router.prettyPrint());
+    }
+  });
+}
+
 function errorOnInvalidMethod (method) {
   switch (method) {
     case 'GET':
@@ -246,6 +271,7 @@ function errorOnInvalidMethod (method) {
   }
   throw new Error(errors['0003'](method));
 }
+
 module.exports = {
   debugObject,
   checkNameDefined,
@@ -253,5 +279,6 @@ module.exports = {
   readFullFolder,
   refixNativeReqRes,
   findRouteInPaths,
-  errorOnInvalidMethod
+  errorOnInvalidMethod,
+  designateRoutes
 };
