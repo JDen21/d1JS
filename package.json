@@ -12,7 +12,11 @@
     "type": "git",
     "url": "git+https://JDen21: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@github.com/JDen21/d1JS.git"
   },
-  "keywords": ["framework", "d1", "callback"],
+  "keywords": [
+    "framework",
+    "d1",
+    "callback"
+  ],
   "author": "deng.",
   "license": "ISC",
   "devDependencies": {
@@ -27,5 +31,10 @@
   "bugs": {
     "url": "https://github.com/JDen21/d1JS/issues"
   },
-  "homepage": "https://github.com/JDen21/d1JS#readme"
+  "homepage": "https://github.com/JDen21/d1JS#readme",
+  "dependencies": {
+    "acorn": "^8.11.3",
+    "find-my-way": "^8.1.0",
+    "yargs": "^17.7.2"
+  }
 }
