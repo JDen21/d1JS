@@ -141,7 +141,7 @@ function serve (applicationPath) {
   );
 
   if (__D1__SERVER__.getServerInstance) {
-    server = __D1__SERVER__.getServerInstance(serve);
+    server = __D1__SERVER__.getServerInstance(server);
   }
 
   server.listen(__D1__SERVER__.port, __D1__SERVER__.host, __D1__SERVER__.cb);
