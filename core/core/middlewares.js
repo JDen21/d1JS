@@ -1,9 +1,10 @@
-function runMiddleWares (middlewares, pathData, req, res) {
+async function runMiddleWares (middlewares, pathData, req, res) {
   let actionReturn;
-  middlewares.forEach((middleware) => {
+  for (let i = 0; i < middlewares.length; i++) {
+    const middleware = middlewares[i];
     if (!res.metadata.endHttp) {
       if (typeof middleware === 'function') {
-        actionReturn = middleware(req, res);
+        actionReturn = await Promise.resolve(middleware(req, res));
       }
       if (typeof middleware === 'object') {
         if (middleware.onlyPaths) {
@@ -13,7 +14,7 @@ function runMiddleWares (middlewares, pathData, req, res) {
             })
           );
           if (isIncluded) {
-            middleware.cb(req, res);
+            await Promise.resolve(middleware.cb(req, res));
           }
         } else if (middleware.excludePaths) {
           const isExcluded = Boolean(
@@ -22,14 +23,14 @@ function runMiddleWares (middlewares, pathData, req, res) {
             })
           );
           if (!isExcluded) {
-            middleware.cb(req, res);
+            await Promise.resolve(middleware.cb(req, res));
           }
         } else {
-          middleware.cb(req, res);
+          await Promise.resolve(middleware.cb(req, res));
         }
       }
     }
-  });
+  }
   reconcileResponse(actionReturn, res);
 }
 

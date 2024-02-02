@@ -133,7 +133,7 @@ function serve (applicationPath) {
   designateRoutes(router, routePaths, routerConfigs, middlewares);
 
   // * instantiate a server
-  const server = http.createServer(
+  let server = http.createServer(
     function requestListener (primReq, primRes) {
       primReq.metadata = { __D1__CONFIGS__, __D1__SERVER__ };
       router.lookup(primReq, primRes);
@@ -141,7 +141,7 @@ function serve (applicationPath) {
   );
 
   if (__D1__SERVER__.getServerInstance) {
-    __D1__SERVER__.getServerInstance(serve);
+    server = __D1__SERVER__.getServerInstance(serve);
   }
 
   server.listen(__D1__SERVER__.port, __D1__SERVER__.host, __D1__SERVER__.cb);

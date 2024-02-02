@@ -6,6 +6,7 @@ const __D1__SERVER__ = {
   },
   getServerInstance: function (server) {
     console.log({ server });
+    return server;
   }
 };
 let data;

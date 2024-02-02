@@ -1,6 +1,6 @@
 {
   "name": "dg1",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "My personal framework.",
   "main": ".eslintrc.js",
   "scripts": {
@@ -13,6 +13,7 @@
     "url": "git+https://JDen21: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@github.com/JDen21/d1JS.git"
   },
   "keywords": [
+    "backend",
     "framework",
     "d1",
     "callback"
