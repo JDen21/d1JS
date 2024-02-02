@@ -5,7 +5,6 @@ const __D1__SERVER__ = {
     console.log(`listening to http://${__D1__SERVER__.host}:${__D1__SERVER__.port}`);
   },
   getServerInstance: function (server) {
-    console.log({ server });
     return server;
   }
 };

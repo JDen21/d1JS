@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dg1": "^1.0.4"
+    "dg1": "^1.0.5"
   }
 }
