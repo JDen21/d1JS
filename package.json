@@ -1,7 +1,7 @@
 {
   "name": "dg1",
-  "version": "1.0.4",
-  "description": "My personal framework.",
+  "version": "1.0.6",
+  "description": "Quickly turn your module into rest service.",
   "main": ".eslintrc.js",
   "scripts": {
     "lint": "npx eslint ./.eslintrc.js . --fix",

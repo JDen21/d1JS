@@ -1,6 +1,5 @@
 ## d1JS
 Just another node rest framework.<br />
-Quickly make your module into rest service.
 
 install <br />
 point app folder to serve function<br />
