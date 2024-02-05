@@ -23,8 +23,8 @@ const __D1__CONFIGS__ = {
 
 const __D1__MIDDLEWARES__ = [middleWare1, {
   cb: middleware2,
-  excludePaths: ['/'],
-  onlyPaths: ['/'] // * excludePaths will be ignored if onlyPaths is present
+  excludePaths: ['/test']
+  // onlyPaths: ['/'] // * excludePaths will be ignored if onlyPaths is present
 }];
 
 function middleWare1 (req, res) {
@@ -33,6 +33,7 @@ function middleWare1 (req, res) {
 
 function middleware2 (req, res) {
   console.log('middleware 2 is procced');
+  res.send('early returning middleware 2');
 }
 
 'GET /';
