@@ -3,7 +3,8 @@ const util = require('util');
 const acorn = require('acorn');
 const path = require('path');
 const errors = require('./errors');
-const { runMiddleWares } = require('./middlewares');
+const { runMiddleWares } = require('./middlewares/middlewares');
+const refixNativeReqRes = require('./natives/index');
 
 function debugObject (obj, decors) {
   return console.log(decors, util.inspect(obj, { showHidden: false, depth: null, colors: true }));
@@ -72,28 +73,6 @@ function readFullFolder (folderPath, folderArr) {
     });
   }
   return folderArr;
-}
-
-// * refix req, res for router handler
-function refixNativeReqRes (req, res, params, store, searchParams) {
-  req = { primitives: req, metadata: {} };
-  res = { primitives: res, metadata: {} };
-  res.status = function (statusCode) {
-    res.primitives.statusCode = statusCode;
-    return res;
-  };
-  res.send = function (value) {
-    res.metadata.endHttp = true;
-    res.primitives.end(value);
-    return res;
-  };
-  res.endHttp = function () {
-    res.metadata.endHttp = true;
-  };
-  req.params = params;
-  req.store = store;
-  req.query = searchParams;
-  return [req, res];
 }
 
 function findRouteInPaths (arr, configs, currPath, currUrl, exportFilePath) {
@@ -277,7 +256,6 @@ module.exports = {
   checkNameDefined,
   checkDefinitionExported,
   readFullFolder,
-  refixNativeReqRes,
   findRouteInPaths,
   errorOnInvalidMethod,
   designateRoutes

@@ -1,4 +1,7 @@
+const defaultMiddlewares = require('./defaults');
+
 async function runMiddleWares (middlewares, pathData, req, res) {
+  middlewares = [...defaultMiddlewares, ...middlewares];
   let actionReturn;
   for (let i = 0; i < middlewares.length; i++) {
     const middleware = middlewares[i];
@@ -14,7 +17,7 @@ async function runMiddleWares (middlewares, pathData, req, res) {
             })
           );
           if (isIncluded) {
-            await Promise.resolve(middleware.cb(req, res));
+            actionReturn = await Promise.resolve(middleware.cb(req, res));
           }
         } else if (middleware.excludePaths) {
           const isExcluded = Boolean(
@@ -23,12 +26,15 @@ async function runMiddleWares (middlewares, pathData, req, res) {
             })
           );
           if (!isExcluded) {
-            await Promise.resolve(middleware.cb(req, res));
+            actionReturn = await Promise.resolve(middleware.cb(req, res));
           }
         } else {
-          await Promise.resolve(middleware.cb(req, res));
+          actionReturn = await Promise.resolve(middleware.cb(req, res));
         }
       }
+    }
+    if (actionReturn !== null && typeof actionReturn !== 'undefined') {
+      break;
     }
   }
   reconcileResponse(actionReturn, res);

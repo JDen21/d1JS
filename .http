@@ -1,7 +1,9 @@
 
 GET http://localhost:3000
 ###
-GET http://localhost:3000/test
+GET http://localhost:3000/test/no-send
 ###
-GET http://localhost:3000/test/test/test-in-folder
+GET http://localhost:3000/test/test-in-folder
+###
+GET http://localhost:3000/test/async-method
 

@@ -10,44 +10,6 @@ const {
   designateRoutes
 } = require('./utils');
 
-/**
- * User can only define the server in the app folder
- * There will be app reserved names, which should only be found in main index.js
- * __D1__SERVER__: Object that contains the description for the server instance to create
- * __D1__CONFIGS__: Object containing extra configs and config overrides.
- *
- * Routing will be composed of a path preprocessor and an action
- * 'path'
- * function action
- * ex.
- * '/'
- * function (req, res, next) {
- *  some action to do
- * }
- *
- * every function action is a middleware
- * which means you can reuse them anywhere
- * else you want. it also possible to create
- * a function action with no path.
- *
- * Route paths will include folders, filenames, and specified routes
- * ex. user might provide path '/login' in file accounts/user.js
- * then the final route path will be '/accounts/user/login'.
- * if the filename is index.js then the filename will be excluded
- * in the route path.
- *
- * There should be no need to provide a callback, the app will only
- * serve routes where there is an exported function action with route path
- *
- *
- * res.metadata.endHttp = setting this to true will stop the call through next middlewares
- * res.send automatically sets endHttp to true. However when using native call,
- * user should manually set endHttp
- *
- * if middleware.onlyPaths exist, middleware,excludePaths will be ignored
- * __D1__SERVER__.getServerInstance: provides the native server object via cb
- */
-
 function serve (applicationPath) {
   // * use acorn to check for file details
   const app = readFullFolder(applicationPath, []);
