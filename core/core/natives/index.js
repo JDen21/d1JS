@@ -6,11 +6,6 @@ function refixNativeReqRes (req, res, params, store, searchParams) {
     res.primitives.statusCode = statusCode;
     return res;
   };
-  // res.send = function (value) {
-  //   res.metadata.endHttp = true;
-  //   res.primitives.end(value);
-  //   return res;
-  // };
   res.contentType = setContentType;
   res.send = send;
   res.endHttp = function () {
@@ -38,6 +33,7 @@ function send (value) {
   if (typeof value === 'object') {
     value = JSON.stringify(value);
   }
+  this.metadata.endHttp = true;
   this.primitives.end(value);
   return this;
 }

@@ -2,7 +2,7 @@ const defaultMiddlewares = require('./defaults');
 
 async function runMiddleWares (middlewares, pathData, req, res) {
   middlewares = [...defaultMiddlewares, ...middlewares];
-  let actionReturn;
+  let actionReturn = null;
   for (let i = 0; i < middlewares.length; i++) {
     const middleware = middlewares[i];
     if (!res.metadata.endHttp) {
@@ -33,11 +33,12 @@ async function runMiddleWares (middlewares, pathData, req, res) {
         }
       }
     }
-    if (actionReturn !== null && typeof actionReturn !== 'undefined') {
+
+    if (actionReturn) {
+      reconcileResponse(actionReturn, res);
       break;
     }
   }
-  reconcileResponse(actionReturn, res);
 }
 
 function reconcileResponse (actionReturn, res) {
