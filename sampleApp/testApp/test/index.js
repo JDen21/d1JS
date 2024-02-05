@@ -14,7 +14,7 @@ function testNoMethod (req, res) {
 
 'get /async-method';
 function asyncMethod (req, res) {
-  return Promise.resolve('this is async response.');
+  return Promise.resolve({ asc: 'this is async response.' });
 }
 
 module.exports = {
