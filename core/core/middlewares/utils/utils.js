@@ -2,9 +2,9 @@ const fs = require('fs');
 const util = require('util');
 const acorn = require('acorn');
 const path = require('path');
-const errors = require('./errors');
-const { runMiddleWares } = require('./middlewares/middlewares');
-const refixNativeReqRes = require('./natives/index');
+const errors = require('../../errors');
+const { runMiddleWares } = require('../middlewares');
+const refixNativeReqRes = require('../../natives/index');
 
 function debugObject (obj, decors) {
   return console.log(decors, util.inspect(obj, { showHidden: false, depth: null, colors: true }));

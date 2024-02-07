@@ -1,4 +1,5 @@
 const defaultMiddlewares = require('./defaults');
+const { resolveResponse } = require('./utils/resolvers');
 
 async function runMiddleWares (middlewares, pathData, req, res) {
   middlewares = [...defaultMiddlewares, ...middlewares];
@@ -35,21 +36,10 @@ async function runMiddleWares (middlewares, pathData, req, res) {
     }
 
     if (actionReturn) {
-      reconcileResponse(actionReturn, res);
+      resolveResponse(actionReturn, res);
       break;
     }
   }
-}
-
-function reconcileResponse (actionReturn, res) {
-  if (res.metadata.endHttp) {
-    return;
-  }
-  if (actionReturn === null || typeof actionReturn === 'undefined') {
-    res.status(500).send('No valid server response.');
-    return;
-  }
-  res.status(200).send(actionReturn);
 }
 
 module.exports = {

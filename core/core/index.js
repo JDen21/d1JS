@@ -1,14 +1,14 @@
 const path = require('path');
 const http = require('http');
 const findMyWay = require('find-my-way');
-const errors = require('./errors');
 const constants = require('./constants');
 const {
   checkDefinitionExported,
   readFullFolder,
   findRouteInPaths,
   designateRoutes
-} = require('./utils');
+} = require('./middlewares/utils/utils');
+const { resolveServer, resolveListener } = require('./middlewares/utils/resolvers');
 
 function serve (applicationPath) {
   // * use acorn to check for file details
@@ -30,17 +30,9 @@ function serve (applicationPath) {
     return Boolean(isDefinitionExported);
   });
 
-  if (!fileWithServerDefExported) {
-    throw new Error(errors['0001'](constants.reservedVarKeys[0]));
-  }
-
-  const { __D1__SERVER__ } = (
-    require(
-      path.join(
-        applicationPath,
-        fileWithServerDefExported.name
-      )
-    )
+  const { __D1__SERVER__ } = resolveServer(
+    applicationPath,
+    fileWithServerDefExported?.name
   );
 
   // * get the configs
@@ -106,7 +98,7 @@ function serve (applicationPath) {
     server = __D1__SERVER__.getServerInstance(server);
   }
 
-  server.listen(__D1__SERVER__.port, __D1__SERVER__.host, __D1__SERVER__.cb);
+  resolveListener(server, __D1__SERVER__);
 }
 
 module.exports = serve;

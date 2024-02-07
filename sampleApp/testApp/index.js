@@ -1,5 +1,5 @@
 const __D1__SERVER__ = {
-  port: 3000,
+  port: 5000,
   host: '127.0.0.1',
   cb: function () {
     console.log(`listening to http://${__D1__SERVER__.host}:${__D1__SERVER__.port}`);
