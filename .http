@@ -1,7 +1,7 @@
 
 GET http://localhost:3000
 ###
-GET http://localhost:3000/test/no-send
+POST http://localhost:3000/test/no-send
 ###
 GET http://localhost:3000/test/test-in-folder
 ###

@@ -1,6 +1,6 @@
 {
   "name": "dg1",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "description": "Quickly turn your module into rest service.",
   "main": ".eslintrc.js",
   "scripts": {
@@ -36,7 +36,6 @@
   "dependencies": {
     "acorn": "^8.11.3",
     "find-my-way": "^8.1.0",
-    "tcp-port-used": "^1.0.2",
-    "yargs": "^17.7.2"
+    "tcp-port-used": "^1.0.2"
   }
 }

@@ -1,5 +1,5 @@
 const t = require('tap');
-const { checkDefinitionExported } = require('../../core/utils');
+const { checkDefinitionExported } = require('../../core/core/middlewares/utils/utils');
 const { isDefinitionExportedData } = require('./utils.data');
 
 t.test('Should check object exports with same key/value', (t) => {

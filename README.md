@@ -7,11 +7,25 @@ provide server data<br />
 quickly turn function to route<br />
 
 |<br />
-|_/testApp/ **see sample in repos<br />
-|_index.js<br />
+|_sampleApp<br />
+&nbsp;&nbsp;&nbsp;|_testApp/ <br />
+&nbsp;&nbsp;&nbsp;|_index.js<br />
 ```
 ./index.js
 const serve = require('dg1/core');
 const path = require('path');
 serve(path.join(__dirname, './testApp'));
 ```
+added promise support and sending of js objects as in res.send function. <br />
+promisified function will work just as a normal function route. <br />
+async or normal promise both should still work (untested). <br />
+added feature resolvers, which will automatically resolve <br />
+a server for the module provided if no __D1__SERVER__ is provided.
+
+added resolveResponse which tries will try to get a response from a <br />
+function route by testing for res.send call first and then the return value, will send error if nothing is found. <br />
+
+sampleApp in repo <br />
+npm install; npm install dg1; npm start;<br />
+will start the server<br />
+server should run at http://localhost:3000, running this path will show all valid routes.
