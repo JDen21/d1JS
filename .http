@@ -7,3 +7,5 @@ GET http://localhost:3000/test/test-in-folder
 ###
 GET http://localhost:3000/test/async-method
 
+###
+GET http://localhost:3000/test/test-static-file
