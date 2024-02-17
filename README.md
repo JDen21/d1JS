@@ -21,9 +21,10 @@ promisified function will work just as a normal function route. <br />
 async or normal promise both should still work (untested). <br />
 added feature resolvers, which will automatically resolve <br />
 a server for the module provided if no __D1__SERVER__ is provided.
-res.sendFile, auto infer content type for html, css, csv and xml. Otherwise use res.setContentType or it will throw error
+res.sendFile, auto infer content type for html, css, csv and xml. Otherwise use res.setContentType or it will throw error<br />
 added resolveResponse which tries will try to get a response from a <br />
 function route by testing for res.send call first and then the return value, will send error if nothing is found. <br />
+dynamic path resolution <br />
 
 sampleApp in repo <br />
 npm install; npm install dg1; npm start;<br />

@@ -63,8 +63,29 @@ async function resolveListener (server, __D1__SERVER__) {
   server.listen(__D1__SERVER__.port, __D1__SERVER__.host, __D1__SERVER__.cb);
 }
 
+function resolveRoutePath (pathSection) {
+  const validFileExtensions = ['.js', '.cjs', '.mjs'];
+  // * remove file extension
+  if (validFileExtensions.some(ext => pathSection.endsWith(ext))) {
+    pathSection = pathSection.split('.')[0];
+  }
+
+  if (pathSection === 'index') {
+    return '';
+  }
+
+  if (pathSection.startsWith('[') && pathSection.endsWith(']')) {
+    pathSection = pathSection
+      .replace('[', ':')
+      .slice(0, -1);
+    return `${pathSection}/`;
+  }
+  return `${pathSection}/`;
+}
+
 module.exports = {
   resolveServer,
   resolveResponse,
-  resolveListener
+  resolveListener,
+  resolveRoutePath
 };

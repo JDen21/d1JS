@@ -1,6 +1,6 @@
 {
   "name": "dg1",
-  "version": "1.0.11",
+  "version": "1.0.14",
   "description": "Quickly turn your module into rest service.",
   "main": ".eslintrc.js",
   "scripts": {

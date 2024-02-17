@@ -5,6 +5,7 @@ const path = require('path');
 const errors = require('../../errors');
 const { runMiddleWares } = require('../middlewares');
 const refixNativeReqRes = require('../../natives/index');
+const { resolveRoutePath } = require('./resolvers');
 
 function debugObject (obj, decors) {
   return console.log(decors, util.inspect(obj, { showHidden: false, depth: null, colors: true }));
@@ -89,24 +90,16 @@ function findRouteInPaths (arr, configs, currPath, currUrl, exportFilePath) {
   // debugObject(currPath, 'currPath')
   currPath.forEach((fileOrFolder) => {
     const currExportFilePath = `${exportFilePath}/${fileOrFolder.name}`;
+    const path = resolveRoutePath(fileOrFolder.name);
+    let thisPathUrl = currUrl;
     if (fileOrFolder.type === 'file') {
-      let thisPathUrl = currUrl;
-      let filePath = '';
-      if (!fileOrFolder.name.startsWith('index.')) {
-        filePath = fileOrFolder.name.split('.')[0];
-      }
-      if (!configs.excludeFileRouting && filePath) {
-        thisPathUrl = `${currUrl}${filePath}/`;
+      if (!configs.excludeFileRouting && path) {
+        thisPathUrl = `${currUrl}${path}`;
       }
       arr.push(...findRoutesInFile(fileOrFolder, thisPathUrl, currExportFilePath));
-    } else { // * there is only type file and folder
-      let thisPathUrl = currUrl;
-      let folderPath = '';
+    } else {
       if (!configs.excludeFolderRouting) {
-        folderPath = fileOrFolder.name;
-      }
-      if (folderPath) {
-        thisPathUrl = `${thisPathUrl}${folderPath}/`;
+        thisPathUrl = `${thisPathUrl}${path}`;
       }
       findRouteInPaths(arr, configs, fileOrFolder.content, thisPathUrl, currExportFilePath);
     }

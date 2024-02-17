@@ -9,3 +9,6 @@ GET http://localhost:3000/test/async-method
 
 ###
 GET http://localhost:3000/test/test-static-file
+
+###
+GET http://localhost:3000/test/folder-sample/file-sample/dynamic-path
