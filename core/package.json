@@ -1,7 +1,7 @@
 {
   "name": "dg1",
-  "version": "1.0.17",
-  "description": "Quickly turn your module into rest service.",
+  "version": "1.0.19",
+  "description": "Turn your module to rest service. Allow your function to handle respond to http request. Autoconfigure server without having to define one.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
