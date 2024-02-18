@@ -1,6 +1,6 @@
 {
   "name": "dg1",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Quickly turn your module into rest service.",
   "main": "index.js",
   "scripts": {
@@ -18,14 +18,6 @@
   ],
   "author": "deng.",
   "license": "ISC",
-  "devDependencies": {
-    "eslint": "^8.56.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1",
-    "tap": "^18.7.0"
-  },
   "bugs": {
     "url": "https://github.com/JDen21/d1JS/issues"
   },
