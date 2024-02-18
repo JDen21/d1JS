@@ -4,7 +4,7 @@ const acorn = require('acorn');
 const path = require('path');
 const errors = require('../../errors');
 const { runMiddleWares } = require('../middlewares');
-const refixNativeReqRes = require('../../natives/index');
+const refixNativeReqRes = require('../../apis/index');
 const { resolveRoutePath } = require('./resolvers');
 
 function debugObject (obj, decors) {
@@ -86,8 +86,6 @@ function findRouteInPaths (arr, configs, currPath, currUrl, exportFilePath) {
      * every file is end of line
      * just get all the routes, update then save
      */
-  // debugObject({ arr, configs, currPath, currUrl });
-  // debugObject(currPath, 'currPath')
   currPath.forEach((fileOrFolder) => {
     const currExportFilePath = `${exportFilePath}/${fileOrFolder.name}`;
     const path = resolveRoutePath(fileOrFolder.name);
